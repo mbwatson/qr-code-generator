@@ -1,7 +1,41 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import QRCode from 'qrcode'
+import downloadIcon from './images/download-icon.svg'
 
 const blankImage = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
+const downloadIconSVG = () => (
+  <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" height="24" width="24">
+    <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"></path>
+  </svg>
+)
+
+//
+
+const DownloadOverlay = ({ dataURL }) => {
+  const handleClickDownload = () => {
+    const link = document.createElement('a')
+    link.download = `qr-code.png`
+    link.href = dataURL
+    link.click()
+  }
+
+  return (
+    <Fragment>
+      <div className="download-overlay" onClick={ handleClickDownload }>
+        <button className="download-button" onClick={ handleClickDownload }>
+          DOWNLOAD QR CODE <img src={ downloadIcon } />
+        </button>
+      </div>
+    </Fragment>
+  )
+}
+
+DownloadOverlay.propTypes = {
+  dataURL: PropTypes.string.isRequired,
+}
+//
 
 export const App = () => {
   const image = useRef()
@@ -36,13 +70,6 @@ export const App = () => {
       })
   }, [])
 
-  const handleClickImage = event => {
-    const link = document.createElement('a')
-    link.download = `qr-code.png`
-    link.href = dataURL
-    link.click()
-  }
-
   return (
     <Fragment>
       <header>
@@ -61,14 +88,16 @@ export const App = () => {
           ref={ image }
           className="code-image"
           style={{ filter: `opacity(${ dataURL ? 1 : 0 })` }}
-          onClick={ handleClickImage }
-        />{
-          !dataURL && (
-            <p className="instruction-box">
-              Enter text to generate a QR code
-            </p>
-          )
-        }</main>
+        />
+          {
+            !dataURL && (
+              <p className="instruction-box">
+                Enter text to generate a QR code
+              </p>
+            )
+          }
+          { dataURL && <DownloadOverlay dataURL={ dataURL } /> }
+        </main>
 
     </Fragment>
   )
