@@ -5,12 +5,6 @@ import downloadIcon from './images/download-icon.svg'
 
 const blankImage = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
-const downloadIconSVG = () => (
-  <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" height="24" width="24">
-    <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"></path>
-  </svg>
-)
-
 //
 
 const DownloadOverlay = ({ dataURL }) => {
@@ -23,7 +17,7 @@ const DownloadOverlay = ({ dataURL }) => {
 
   return (
     <Fragment>
-      <div className="download-overlay" onClick={ handleClickDownload }>
+      <div className="download-overlay">
         <button className="download-button" onClick={ handleClickDownload }>
           DOWNLOAD QR CODE <img src={ downloadIcon } />
         </button>
